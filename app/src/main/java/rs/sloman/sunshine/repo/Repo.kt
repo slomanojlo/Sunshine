@@ -10,6 +10,8 @@ import javax.inject.Singleton
 @Singleton
 class Repo @Inject constructor(private val weatherApi: WeatherApi) {
 
-    suspend fun getWeather(city: String) : Response<OpenWeather> = weatherApi.getWeather(city, BuildConfig.api_key)
+    suspend fun getWeatherCity(city: String) : Response<OpenWeather> = weatherApi.getWeatherCity(city, BuildConfig.api_key)
+    suspend fun getWeatherLocation(lat: String, long : String, ) : Response<OpenWeather> =
+        weatherApi.getWeatherLocation(lat, long, BuildConfig.api_key, "metric")
 
 }

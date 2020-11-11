@@ -8,9 +8,17 @@ import rs.sloman.sunshine.model.OpenWeather
 interface WeatherApi {
 
     @GET("weather")
-    suspend fun getWeather(
+    suspend fun getWeatherCity(
         @Query("q") city_name : String,
         @Query("appid") appId : String
+    ): Response<OpenWeather>
+
+    @GET("weather")
+    suspend fun getWeatherLocation(
+        @Query("lat") latitude : String,
+        @Query("lon") longitude : String,
+        @Query("appid") appId : String,
+        @Query("units") units : String,
     ): Response<OpenWeather>
 
 }
