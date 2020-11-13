@@ -20,7 +20,9 @@ fun bindTextView(textView: TextView, string: String?) {
 
 @BindingAdapter("bindDoubleTemp")
 fun bindDoubleTemp(textView: TextView, double:Double?) {
+    if (double != 0.0) {
     textView.text = double?.roundToInt().toString()
+    }
 }
 
 @BindingAdapter("bindIcon")
