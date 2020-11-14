@@ -10,7 +10,8 @@ interface WeatherApi {
     @GET("weather")
     suspend fun getWeatherCity(
         @Query("q") city_name : String,
-        @Query("appid") appId : String
+        @Query("appid") appId : String,
+        @Query("units") units : String,
     ): Response<OpenWeather>
 
     @GET("weather")

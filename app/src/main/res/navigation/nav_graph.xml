@@ -12,7 +12,11 @@
         tools:layout= "@layout/fragment_weather">
         <action
             android:id="@+id/action_weatherFragment_to_favoritesFragment"
-            app:destination="@id/favoritesFragment" />
+            app:destination="@id/favoritesFragment"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:enterAnim="@anim/nav_default_exit_anim"
+            app:exitAnim="@anim/nav_default_pop_enter_anim"/>
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -20,6 +24,10 @@
         android:label="FavoritesFragment" >
         <action
             android:id="@+id/action_favoritesFragment_to_weatherFragment2"
-            app:destination="@id/weatherFragment" />
+            app:destination="@id/weatherFragment"
+            app:popEnterAnim="@anim/nav_default_exit_anim"
+            app:popExitAnim="@anim/nav_default_pop_enter_anim"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
 </navigation>
