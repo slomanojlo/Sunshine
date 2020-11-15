@@ -4,4 +4,17 @@
     <string name="please_select_valid_city">Please select a valid city</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="not_implemented_yet">Not implemented yet</string>
+    <string name="settings">Settings</string>
+    <string name="enable_location_services">Please Enable your location services.</string>
+    <string name="weather_description">weather description</string>
+    <string name="sunshine">sunshine</string>
+    <string name="weather">Weather</string>
+    <string name="favorites">Favorites</string>
+    <string name="preferences">Preferences</string>
+    <string name="favorite_city">Favorite city:</string>
+    <string name="enable_dark_mode">Enable Dark Mode</string>
+    <string name="metric_imperial">Metric / Imperial</string>
+    <string name="info_sunshine_rs">info@sunshine.rs</string>
+    <string name="search">Search</string>
 </resources>

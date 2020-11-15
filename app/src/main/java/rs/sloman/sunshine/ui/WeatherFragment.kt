@@ -7,7 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
+import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -33,6 +33,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.PermissionCallbacks {
 
+
     companion object {
         const val REQUEST_CODE_LOCATION_PERMISSION = 0
     }
@@ -41,13 +42,11 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
 
     private val viewModel: WeatherViewModel by activityViewModels()
 
-    @SuppressLint("MissingPermission")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
 
 
         (activity as MainActivity?)?.supportActionBar?.title = "Sunshine"
@@ -62,18 +61,14 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
         requestPermissions()
 
         if (viewModel.openWeather.value == null) {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    Timber.d("${location?.longitude} ${location?.latitude}")
-                    viewModel.getWeatherLocation(
-                        location?.latitude.toString(),
-                        location?.longitude.toString()
-                    )
-                }
+            if (viewModel.favCity.value != null && viewModel.favCity.value!!.city.isNotEmpty()) {
+                viewModel.getWeatherCity(viewModel.favCity.value!!.city)
+            } else {
+                getLocationByCoordinates()
+            }
         }
 
-        viewModel.errorMessage.observe(viewLifecycleOwner){
+        viewModel.errorMessage.observe(viewLifecycleOwner) {
             if (it == Constants.ERR_CITY_NOT_FOUND) {
                 Snackbar.make(
                     binding.root,
@@ -83,20 +78,48 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
             }
         }
 
-        viewModel.openWeather.observe(viewLifecycleOwner){
-            CoroutineScope(IO).launch{
-            val isFavorite = viewModel.findFavoriteCity(it.name)
+        viewModel.openWeather.observe(viewLifecycleOwner) {
+            CoroutineScope(IO).launch {
+                val isFavorite = viewModel.findFavoriteCity(it.name)
                 viewModel.isFavoriteCity.postValue(isFavorite)
             }
 
         }
 
-
-        binding.ivFavorite.setOnClickListener{
+        viewModel.favCity?.observe(viewLifecycleOwner) {
+            it?.let {
+                viewModel.getWeatherCity(it.city)
+            }
+        }
+        
+        binding.ivFavorite.setOnClickListener {
             viewModel.insertOrRemoveFavCity()
         }
 
         return binding.root
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLocationByCoordinates() {
+        fusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                Timber.d("${location?.longitude} ${location?.latitude}")
+
+                if (location != null) {
+                    viewModel.getWeatherLocation(
+                        location.latitude.toString(),
+                        location.longitude.toString()
+                    )
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.enable_location_services),
+                        LENGTH_LONG
+                    ).show()
+                }
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -111,7 +134,6 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
             override fun onQueryTextSubmit(query: String?): Boolean {
 
                 if (query != null) {
-                    Toast.makeText(requireContext(), query, Toast.LENGTH_SHORT).show()
                     viewModel.getWeatherCity(query)
                 }
                 searchView.clearFocus()
@@ -159,7 +181,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        //TODO Permission Granted
+        getLocationByCoordinates()
     }
 
     override fun onRequestPermissionsResult(

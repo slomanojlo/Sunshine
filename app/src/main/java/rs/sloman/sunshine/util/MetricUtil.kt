@@ -13,6 +13,15 @@ class MetricUtil {
             }
         }
 
+        fun Locale.symbol() : String{
+
+            return when (this.unit()){
+                Constants.IMPERIAL -> "°F"
+                else -> "°C"
+            }
+
+        }
+
     }
 
 }

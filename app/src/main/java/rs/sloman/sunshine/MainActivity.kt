@@ -3,32 +3,41 @@ package rs.sloman.sunshine
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var navController: NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration
+
+        @set:Inject
+        var isDarkModeEnabled: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar as Toolbar)
 
+        AppCompatDelegate.setDefaultNightMode(
+            if (isDarkModeEnabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        )
+
         nav_view.setNavigationItemSelectedListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.nav_weather ->
                     this.findNavController(R.id.nav_host_fragment)
                         .navigate(R.id.weatherFragment)
                 R.id.nav_favorites -> this.findNavController(R.id.nav_host_fragment)
                     .navigate(R.id.favoritesFragment)
+                R.id.nav_preferences -> this.findNavController(R.id.nav_host_fragment)
+                    .navigate(R.id.settingsFragment)
             }
             drawerLayout.closeDrawer(GravityCompat.START, true)
             true
@@ -52,15 +61,17 @@ class MainActivity : AppCompatActivity() {
         if (drawerLayout.isDrawerOpen(nav_view)) {
             drawerLayout.closeDrawer(nav_view)
         } else {
-//            val currentFragment = findNavController(R.id.navHostFragment).currentDestination?.label
-//
-//            currentFragment?.let {
-//                if (it == "ProductListFragment") {
-//                    finish()
-//                } else {
-//                    Navigation.findNavController(this, R.id.navHostFragment)
-//                        .navigate(R.id.productListFragment)
-//                }
+            val currentFragment =
+                findNavController(R.id.nav_host_fragment).currentDestination?.label
+
+            currentFragment?.let {
+                if (it == "WeatherFragment") {
+                    finish()
+                } else {
+                    Navigation.findNavController(this, R.id.nav_host_fragment)
+                        .navigate(R.id.weatherFragment)
+                }
+            }
         }
     }
 }

@@ -24,6 +24,7 @@ class FavoritesFragment  : Fragment(R.layout.fragment_favorites){
 
     private val viewModel : FavoritesViewModel by activityViewModels()
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,15 +33,16 @@ class FavoritesFragment  : Fragment(R.layout.fragment_favorites){
         (activity as MainActivity?)?.supportActionBar?.title = "Favorites"
         (activity as MainActivity?)?.nav_view?.setCheckedItem(R.id.nav_favorites)
 
-
         val binding = FragmentFavoritesBinding.inflate(layoutInflater)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
 
         binding.rwFavsList.apply {
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
             setHasFixedSize(true)
             adapter = FavAdapter(FavAdapter.OnclickListener {
+                viewModel.updateFavoriteCity(it)
                 Timber.d(it.city)
             })
         }

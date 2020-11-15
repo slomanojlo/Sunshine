@@ -1,5 +1,6 @@
 package rs.sloman.sunshine.viewmodels
 
+import android.content.SharedPreferences
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -9,9 +10,10 @@ import rs.sloman.sunshine.model.Favorite
 import rs.sloman.sunshine.repo.Repo
 import timber.log.Timber
 
-class FavoritesViewModel  @ViewModelInject constructor(private val repo : Repo) : ViewModel() {
+class FavoritesViewModel  @ViewModelInject constructor(private val repo : Repo, sharedPreferences: SharedPreferences) : ViewModel() {
 
     val favList : LiveData<List<Favorite>> = repo.getAllFavorites()
+    val favCity : LiveData<Favorite?> = repo.getFavoriteCity()
 
 init {
     Timber.d("fav init")
@@ -21,6 +23,12 @@ init {
     fun removeFavCity(favorite: Favorite){
         viewModelScope.launch {
                 repo.removeFavorite(favorite)
+        }
+    }
+
+    fun updateFavoriteCity(favorite: Favorite){
+        viewModelScope.launch {
+            repo.updateFavoriteCity(favorite)
         }
     }
 

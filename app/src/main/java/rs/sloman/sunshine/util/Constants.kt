@@ -12,4 +12,8 @@ object Constants {
     const val IMPERIAL = "imperial"
     const val ERR_CITY_NOT_FOUND = "city not found"
 
+    const val SHARED_PREFERENCES_NAME = "shared_prefs"
+    const val FAV_CITY = "fav_city"
+    const val DARK_MODE = "dark_mode"
+
 }

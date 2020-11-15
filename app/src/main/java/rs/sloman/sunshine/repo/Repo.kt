@@ -22,9 +22,11 @@ class Repo @Inject constructor(private val weatherApi: WeatherApi, private val f
         weatherApi.getWeatherLocation(lat, long, BuildConfig.api_key, Locale.getDefault().unit())
 
     suspend fun insertFavorite(favorite: Favorite) = favoriteDAO.insertFavorite(favorite)
+    suspend fun updateFavoriteCity(favorite: Favorite) = favoriteDAO.updateFavoriteCity(favorite)
     suspend fun removeFavorite(favorite: Favorite) = favoriteDAO.removeFavorite(favorite)
     suspend fun findFavoriteCity(city: String): Favorite = favoriteDAO.findFavoriteCity(city)
     fun getAllFavorites() = favoriteDAO.getAllFavorites()
+    fun getFavoriteCity(): LiveData<Favorite?> = favoriteDAO.getFavoriteCity()
 
 }
 

@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            app:bindDoubleTemp="@{viewModel.openWeather.main.temp}"
+            app:bindTemp="@{viewModel.openWeather.main.temp}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            app:bindDoubleTemp="@{viewModel.openWeather.main.feelsLike}"
+            app:bindFeelsLike="@{viewModel.openWeather.main.feelsLike}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            app:bindDoubleTemp="@{viewModel.openWeather.main.tempMax}"
+            app:bindTempMax="@{viewModel.openWeather.main.tempMax}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,12 +70,12 @@
             tools:text="Temp max" />
 
         <TextView
-            android:id="@+id/tvTempMin"
+            android:id="@+id/tvDarkMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            app:bindDoubleTemp="@{viewModel.openWeather.main.tempMin}"
+            app:bindTempMin="@{viewModel.openWeather.main.tempMin}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +92,8 @@
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@+id/tvPlace"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            tools:src="@tools:sample/backgrounds/scenic"
+            android:contentDescription="@string/weather_description" />
 
         <ImageView
             android:id="@+id/ivFavorite"
@@ -102,7 +103,8 @@
             android:layout_marginBottom="16dp"
             app:bindFav="@{viewModel.isFavoriteCity()}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="TODO" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

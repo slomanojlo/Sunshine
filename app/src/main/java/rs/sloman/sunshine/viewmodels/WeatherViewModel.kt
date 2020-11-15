@@ -17,6 +17,7 @@ class WeatherViewModel @ViewModelInject constructor(private val repo: Repo) : Vi
     val openWeather: MutableLiveData<OpenWeather> = MutableLiveData()
     val errorMessage: MutableLiveData<String> = MutableLiveData()
     val isFavoriteCity: MutableLiveData<Boolean> = MutableLiveData()
+    val favCity : LiveData<Favorite?> = repo.getFavoriteCity()
 
 
     init {
@@ -60,8 +61,8 @@ class WeatherViewModel @ViewModelInject constructor(private val repo: Repo) : Vi
         }
     }
 
-    suspend fun findFavoriteCity(city: String) : Boolean {
-        var favorite : Favorite? = null
+    suspend fun findFavoriteCity(city: String): Boolean {
+        var favorite: Favorite? = null
         val job = viewModelScope.launch {
             favorite = repo.findFavoriteCity(city)
         }
@@ -72,28 +73,31 @@ class WeatherViewModel @ViewModelInject constructor(private val repo: Repo) : Vi
 
     private fun insertFavCity() {
         viewModelScope.launch {
-            openWeather.value!!.name.let {
-                repo.insertFavorite(Favorite(it))
-                isFavoriteCity.value = true
+            openWeather.value?.let {
+                openWeather.value!!.name.let {
+                    repo.insertFavorite(Favorite(it))
+                    isFavoriteCity.value = true
+                }
             }
 
         }
     }
 
-    fun insertOrRemoveFavCity(){
-        if(isFavoriteCity.value == true) removeFavCity()
+    fun insertOrRemoveFavCity() {
+        if (isFavoriteCity.value == true) removeFavCity()
         else insertFavCity()
     }
 
 
-    private fun removeFavCity(){
+    private fun removeFavCity() {
         viewModelScope.launch {
-            openWeather.value!!.name.let {
-                repo.removeFavorite(Favorite(it))
-                isFavoriteCity.value = false
+            openWeather.value?.let {
+                openWeather.value!!.name.let {
+                    repo.removeFavorite(Favorite(it))
+                    isFavoriteCity.value = false
+                }
             }
 
         }
     }
-
 }

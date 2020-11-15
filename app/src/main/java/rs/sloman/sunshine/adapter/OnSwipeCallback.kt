@@ -37,7 +37,7 @@ class OnSwipeCallback(private val viewModel: FavoritesViewModel, private val con
             // Get RecyclerView item from the ViewHolder
             val itemView = viewHolder.itemView
 
-            val p: Paint = Paint()
+            val p = Paint()
             p.color = getThemeAccentColor(context)
             if (dX > 0) {
                 // Draw Rect with varying right side, equal to displacement dX
@@ -61,15 +61,15 @@ class OnSwipeCallback(private val viewModel: FavoritesViewModel, private val con
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         Timber.d("Slo onsWiped ${viewHolder.adapterPosition}")
 
-
         val favorite = viewModel.getFavFromPosition(viewHolder.adapterPosition)
+        val favCity =
         viewModel.removeFavCity(favorite)
 
         Timber.d("Slo onsWiped ${viewModel.favList.value?.size}")
 
     }
 
-    fun getThemeAccentColor(context: Context): Int {
+    private fun getThemeAccentColor(context: Context): Int {
         val value = TypedValue()
         context.theme.resolveAttribute(R.attr.colorBackground, value, true)
         return value.data
