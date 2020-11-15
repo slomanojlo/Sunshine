@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import rs.sloman.sunshine.util.Constants
 import rs.sloman.sunshine.R
+import rs.sloman.sunshine.util.Constants
 import kotlin.math.roundToInt
 
 
@@ -43,4 +43,13 @@ fun bindIcon(imageView: ImageView, icon: String?) {
     } else {
         imageView.visibility = View.GONE
     }
+}
+
+@BindingAdapter("bindFav")
+fun bindFav(imageView: ImageView, isFavorite: Boolean){
+
+        Glide.with(imageView)
+            .load(if(isFavorite) R.drawable.ic_fav_full else R.drawable.ic_fav_empty)
+            .into(imageView)
+
 }

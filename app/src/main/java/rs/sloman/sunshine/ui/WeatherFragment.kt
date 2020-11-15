@@ -16,6 +16,9 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import rs.sloman.sunshine.MainActivity
@@ -76,9 +79,17 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
             }
         }
 
+        viewModel.openWeather.observe(viewLifecycleOwner){
+            CoroutineScope(IO).launch{
+            val isFavorite = viewModel.findFavoriteCity(it.name)
+                viewModel.isFavoriteCity.postValue(isFavorite)
+            }
+
+        }
+
 
         binding.ivFavorite.setOnClickListener{
-            viewModel.insertFavCity()
+            viewModel.insertOrRemoveFavCity()
         }
 
         return binding.root

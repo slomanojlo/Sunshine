@@ -1,6 +1,7 @@
 package rs.sloman.sunshine.viewmodels
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,20 +12,19 @@ import rs.sloman.sunshine.model.OpenWeather
 import rs.sloman.sunshine.repo.Repo
 import timber.log.Timber
 
-class WeatherViewModel @ViewModelInject constructor(private val repo : Repo) : ViewModel() {
+class WeatherViewModel @ViewModelInject constructor(private val repo: Repo) : ViewModel() {
 
-    val openWeather : MutableLiveData<OpenWeather> = MutableLiveData()
-    val errorMessage : MutableLiveData<String> = MutableLiveData()
+    val openWeather: MutableLiveData<OpenWeather> = MutableLiveData()
+    val errorMessage: MutableLiveData<String> = MutableLiveData()
     val isFavoriteCity: MutableLiveData<Boolean> = MutableLiveData()
 
-    init {
-        Timber.d("init")
-        Timber.d(repo.hashCode().toString())
 
+    init {
+        Timber.d(repo.hashCode().toString())
     }
 
 
-    fun getWeatherLocation(lat: String, lon : String) {
+    fun getWeatherLocation(lat: String, lon: String) {
 
         viewModelScope.launch {
             val response = repo.getWeatherLocation(lat, lon)
@@ -38,7 +38,7 @@ class WeatherViewModel @ViewModelInject constructor(private val repo : Repo) : V
         }
     }
 
-    fun getWeatherCity(city : String) {
+    fun getWeatherCity(city: String) {
 
         viewModelScope.launch {
             val response = repo.getWeatherCity(city = city)
@@ -52,21 +52,47 @@ class WeatherViewModel @ViewModelInject constructor(private val repo : Repo) : V
                     val errorJson = JSONObject(response.errorBody()!!.charStream().readText())
                     errorMessage.value = errorJson.getString("message")
 
-                } catch (e : Exception){
-                        e.printStackTrace()
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
 
         }
     }
 
-    fun insertFavCity() {
+    suspend fun findFavoriteCity(city: String) : Boolean {
+        var favorite : Favorite? = null
+        val job = viewModelScope.launch {
+            favorite = repo.findFavoriteCity(city)
+        }
+        job.join()
+
+        return favorite != null
+    }
+
+    private fun insertFavCity() {
         viewModelScope.launch {
             openWeather.value!!.name.let {
-            val response = repo.insertFavorite(Favorite(it))
+                val response = repo.insertFavorite(Favorite(it))
+                isFavoriteCity.value = true
             }
 
         }
     }
 
+    fun insertOrRemoveFavCity(){
+        if(isFavoriteCity.value == true) removeFavCity()
+        else insertFavCity()
+    }
+
+
+    private fun removeFavCity(){
+        viewModelScope.launch {
+            openWeather.value!!.name.let {
+                val response = repo.removeFavorite(Favorite(it))
+                isFavoriteCity.value = false
+            }
+
+        }
+    }
 }
