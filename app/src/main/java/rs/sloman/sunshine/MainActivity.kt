@@ -1,15 +1,13 @@
 package rs.sloman.sunshine
 
 import android.os.Bundle
-import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,21 +20,47 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar as Toolbar)
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.findNavController()
+        nav_view.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.nav_weather ->
+                    this.findNavController(R.id.nav_host_fragment)
+                        .navigate(R.id.weatherFragment)
+                R.id.nav_favorites -> this.findNavController(R.id.nav_host_fragment)
+                    .navigate(R.id.favoritesFragment)
+            }
+            drawerLayout.closeDrawer(GravityCompat.START, true)
+            true
+        }
 
-        bottom_nav.setupWithNavController(navController)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar as Toolbar,
+            R.string.open,
+            R.string.close
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        item.onNavDestinationSelected(navController)
-        return true
-    }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    override fun onBackPressed() {
+
+        if (drawerLayout.isDrawerOpen(nav_view)) {
+            drawerLayout.closeDrawer(nav_view)
+        } else {
+//            val currentFragment = findNavController(R.id.navHostFragment).currentDestination?.label
+//
+//            currentFragment?.let {
+//                if (it == "ProductListFragment") {
+//                    finish()
+//                } else {
+//                    Navigation.findNavController(this, R.id.navHostFragment)
+//                        .navigate(R.id.productListFragment)
+//                }
+        }
     }
 }

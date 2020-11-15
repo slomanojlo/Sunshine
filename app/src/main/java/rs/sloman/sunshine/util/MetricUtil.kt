@@ -1,6 +1,5 @@
-package rs.sloman.sunshine.viewmodels
+package rs.sloman.sunshine.util
 
-import rs.sloman.sunshine.Constants
 import java.util.*
 
 class MetricUtil {

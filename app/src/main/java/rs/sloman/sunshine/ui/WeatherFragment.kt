@@ -9,17 +9,20 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.observe
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import rs.sloman.sunshine.Constants
+import rs.sloman.sunshine.MainActivity
 import rs.sloman.sunshine.R
-import rs.sloman.sunshine.TrackingUtil
 import rs.sloman.sunshine.databinding.FragmentWeatherBinding
+import rs.sloman.sunshine.util.Constants
+import rs.sloman.sunshine.util.TrackingUtil
 import rs.sloman.sunshine.viewmodels.WeatherViewModel
 import timber.log.Timber
 
@@ -32,7 +35,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val viewModel: WeatherViewModel by viewModels()
+    private val viewModel: WeatherViewModel by activityViewModels()
 
     @SuppressLint("MissingPermission")
     override fun onCreateView(
@@ -40,29 +43,31 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        (activity as MainActivity?)?.supportActionBar?.title = "Sunshine"
+        (activity as MainActivity?)?.nav_view?.setCheckedItem(R.id.nav_weather)
+
         val binding = FragmentWeatherBinding.inflate(layoutInflater)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
 
         setHasOptionsMenu(true)
 
-        binding.viewModel = viewModel
-
-        binding.lifecycleOwner = viewLifecycleOwner
-
         requestPermissions()
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        if (viewModel.openWeather.value == null) {
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    Timber.d("${location?.longitude} ${location?.latitude}")
+                    viewModel.getWeatherLocation(
+                        location?.latitude.toString(),
+                        location?.longitude.toString()
+                    )
+                }
+        }
 
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                Timber.d("${location?.longitude} ${location?.latitude}")
-                viewModel.getWeatherCity(
-                    location?.latitude.toString(),
-                    location?.longitude.toString()
-                )
 
-            }
-
-        viewModel.errorMessage.observe(viewLifecycleOwner) {
+        viewModel.errorMessage.observe(viewLifecycleOwner){
             if (it == Constants.ERR_CITY_NOT_FOUND) {
                 Snackbar.make(
                     binding.root,
@@ -81,6 +86,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
 
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
+        searchView.queryHint = "Find a city"
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

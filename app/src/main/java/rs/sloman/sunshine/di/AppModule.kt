@@ -7,7 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import rs.sloman.sunshine.Constants
+import rs.sloman.sunshine.util.Constants
 import rs.sloman.sunshine.network.WeatherApi
 import javax.inject.Singleton
 

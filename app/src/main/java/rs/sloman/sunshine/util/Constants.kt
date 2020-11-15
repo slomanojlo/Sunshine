@@ -1,4 +1,4 @@
-package rs.sloman.sunshine
+package rs.sloman.sunshine.util
 
 object Constants {
 

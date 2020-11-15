@@ -48,39 +48,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            tools:text="Feels like"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:bindDoubleTemp="@{viewModel.openWeather.main.feelsLike}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTemp" />
+            app:layout_constraintTop_toBottomOf="@+id/tvTemp"
+            tools:text="Feels like" />
 
         <TextView
             android:id="@+id/tvTempMax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            tools:text="Temp max"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:bindDoubleTemp="@{viewModel.openWeather.main.tempMax}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvFeelsLike" />
+            app:layout_constraintTop_toBottomOf="@+id/tvFeelsLike"
+            tools:text="Temp max" />
 
         <TextView
             android:id="@+id/tvTempMin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            tools:text="Temp min"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:bindDoubleTemp="@{viewModel.openWeather.main.tempMin}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTempMax" />
+            app:layout_constraintTop_toBottomOf="@+id/tvTempMax"
+            tools:text="Temp min" />
 
         <ImageView
             android:id="@+id/ivWeatherIcon"

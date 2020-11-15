@@ -1,7 +1,8 @@
-package rs.sloman.sunshine
+package rs.sloman.sunshine.util
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import rs.sloman.sunshine.BuildConfig
 import timber.log.Timber
 
 @HiltAndroidApp

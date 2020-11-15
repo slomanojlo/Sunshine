@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import rs.sloman.sunshine.Constants
+import rs.sloman.sunshine.util.Constants
 import rs.sloman.sunshine.R
 import kotlin.math.roundToInt
 
