@@ -116,6 +116,13 @@ dependencies {
     //Google Play Services Location
     implementation 'com.google.android.gms:play-services-location:17.1.0'
 
+    // Room
+    implementation "androidx.room:room-runtime:2.2.5"
+    kapt "androidx.room:room-compiler:2.2.5"
+
+    // Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:2.2.5"
+
 }
 
 kapt {

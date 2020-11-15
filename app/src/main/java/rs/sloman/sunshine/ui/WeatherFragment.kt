@@ -66,7 +66,6 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
                 }
         }
 
-
         viewModel.errorMessage.observe(viewLifecycleOwner){
             if (it == Constants.ERR_CITY_NOT_FOUND) {
                 Snackbar.make(
@@ -75,6 +74,11 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
+        }
+
+
+        binding.ivFavorite.setOnClickListener{
+            viewModel.insertFavCity()
         }
 
         return binding.root

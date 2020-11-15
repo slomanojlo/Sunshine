@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import rs.sloman.sunshine.model.Favorite
 import rs.sloman.sunshine.model.OpenWeather
 import rs.sloman.sunshine.repo.Repo
 import timber.log.Timber
@@ -14,6 +15,7 @@ class WeatherViewModel @ViewModelInject constructor(private val repo : Repo) : V
 
     val openWeather : MutableLiveData<OpenWeather> = MutableLiveData()
     val errorMessage : MutableLiveData<String> = MutableLiveData()
+    val isFavoriteCity: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         Timber.d("init")
@@ -53,6 +55,15 @@ class WeatherViewModel @ViewModelInject constructor(private val repo : Repo) : V
                 } catch (e : Exception){
                         e.printStackTrace()
                 }
+            }
+
+        }
+    }
+
+    fun insertFavCity() {
+        viewModelScope.launch {
+            openWeather.value!!.name.let {
+            val response = repo.insertFavorite(Favorite(it))
             }
 
         }
