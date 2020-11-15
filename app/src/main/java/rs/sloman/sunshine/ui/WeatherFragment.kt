@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -46,6 +47,9 @@ class WeatherFragment : Fragment(R.layout.fragment_weather), EasyPermissions.Per
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
+
         (activity as MainActivity?)?.supportActionBar?.title = "Sunshine"
         (activity as MainActivity?)?.nav_view?.setCheckedItem(R.id.nav_weather)
 

@@ -73,7 +73,7 @@ class WeatherViewModel @ViewModelInject constructor(private val repo: Repo) : Vi
     private fun insertFavCity() {
         viewModelScope.launch {
             openWeather.value!!.name.let {
-                val response = repo.insertFavorite(Favorite(it))
+                repo.insertFavorite(Favorite(it))
                 isFavoriteCity.value = true
             }
 
@@ -89,10 +89,11 @@ class WeatherViewModel @ViewModelInject constructor(private val repo: Repo) : Vi
     private fun removeFavCity(){
         viewModelScope.launch {
             openWeather.value!!.name.let {
-                val response = repo.removeFavorite(Favorite(it))
+                repo.removeFavorite(Favorite(it))
                 isFavoriteCity.value = false
             }
 
         }
     }
+
 }

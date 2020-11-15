@@ -24,6 +24,7 @@ class Repo @Inject constructor(private val weatherApi: WeatherApi, private val f
     suspend fun insertFavorite(favorite: Favorite) = favoriteDAO.insertFavorite(favorite)
     suspend fun removeFavorite(favorite: Favorite) = favoriteDAO.removeFavorite(favorite)
     suspend fun findFavoriteCity(city: String): Favorite = favoriteDAO.findFavoriteCity(city)
+    fun getAllFavorites() = favoriteDAO.getAllFavorites()
 
 }
 
